@@ -8,6 +8,7 @@ int main(int argc, char* argv[])
 	int servPort;
 	char* string;
 	int len;
+	int maxLen = 256;
 	char buffer[256+1];
 	char* ptr = buffer;
 	struct sockaddr_in servAddr;
@@ -24,7 +25,7 @@ int main(int argc, char* argv[])
 	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
 	inet_pton(AF_INET, servName, &servAddr.sin_addr);
-	serverAddr.sin_port = htons(servPort);
+	servAddr.sin_port = htons(servPort);
 
 	if ( (s = socket(PF_INET, SOCK_STREAM, 0)) < 0)
 	{
@@ -32,7 +33,7 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	if (connect(sd, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0)
+	if (connect(s, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0)
 	{
 		perror("Error: connection failed!");
 		exit(1);

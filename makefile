@@ -8,3 +8,5 @@ udp-client: udp-client.c
 	gcc -o udp-client udp-client.c -Wall
 udp-server: udp-server.c
 	gcc -o udp-server udp-server.c -Wall
+clean:
+	rm tcp-server tcp-client udp-server udp-client
