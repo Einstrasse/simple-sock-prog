@@ -7,7 +7,7 @@ int main(void)
 	char buffer[256];
 	struct sockaddr_in servAddr;
 	struct sockaddr_in clntAddr;
-	int cIntAddrLen;
+	socklen_t clntAddrLen;
 
 	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
@@ -28,8 +28,8 @@ int main(void)
 	for(;;)
 	{
 		len = recvfrom(s, buffer, sizeof(buffer), 0,
-		 (struct sockaddr*)&cIntAddr, &cIntAddrLen);
+		 (struct sockaddr*)&clntAddr, &clntAddrLen);
 
-		sendto(s, buffer, len, 0, (struct sockaddr*)&cIntAddr, sizeof(cIntAddr));
+		sendto(s, buffer, len, 0, (struct sockaddr*)&clntAddr, sizeof(clntAddr));
 	}
 }

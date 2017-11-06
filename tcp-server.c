@@ -1,6 +1,6 @@
 #include "headerFiles.h"
 
-#define SERV_PORT 1234
+
 
 int main(void)
 {

@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	}
 
 	len = sendto(s, string, strlen(string), 0, 
-		(struct sockaddr)&servAddr, sizeof(servAddr));
+		(const struct sockaddr*)&servAddr, sizeof(servAddr));
 
 	recvfrom(s, buffer, len, 0, NULL, NULL);
 
