@@ -10,9 +10,10 @@ int main(int argc, char* argv[])
 	int len;
 	int maxLen = 256;
 	char buffer[256+1];
+	char send_buf[256];
 	char* ptr = buffer;
 	struct sockaddr_in servAddr;
-	if (argc != 3)
+	if (argc != 4)
 	{
 		printf("Error: three arguments are needed!");
 		exit(1);
@@ -32,23 +33,37 @@ int main(int argc, char* argv[])
 		perror("Error: socket creation failed!");
 		exit(1);
 	}
+	printf("create socket\n");
 
 	if (connect(s, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0)
 	{
 		perror("Error: connection failed!");
 		exit(1);
 	}
-	send(s, string, strlen(string), 0);
-	while((n = recv(s, ptr, maxLen, 0)) > 0)
+	printf("create connection\n");
+
+	strcpy(send_buf, string);
+	send_buf[strlen(string)] = 0x0a;
+	send_buf[strlen(string)+1] = '\0';
+	int send_len = send(s, send_buf, strlen(send_buf), 0);
+	if (send_len == -1) {
+		perror("Error: send failed!");
+		exit(1);
+	}
+
+	printf("sending message '%s', len=%d\n", string, send_len);
+	while( (n = recv(s, ptr, maxLen, 0)) > 0)
 	{
+		printf("receiving reply %d bytes..\n", n);
+		write(1, ptr, n);
 		ptr += n;
 		maxLen -= n;
 		len += n;
 	}
 
-	buffer[len] = '\0';
-	printf("Echoed string received:");
-	fputs(buffer, stdout);
+	// buffer[len] = '\0';
+	// printf("Echoed string received:");
+	// fputs(buffer, stdout);
 	close(s);
 	exit(0);
 }
