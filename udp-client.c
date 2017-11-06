@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	int servPort;
 	char* string;
 	char buffer[256+1];
-	struct sockaddr_int servAddr;
+	struct sockaddr_in servAddr;
 
 	if (argc != 3)
 	{

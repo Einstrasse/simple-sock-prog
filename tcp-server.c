@@ -14,7 +14,7 @@ int main(void)
 	int waitSize = 16;
 	struct sockaddr_in servAddr;
 	struct sockaddr_in clientAddr;
-	int clientAddrLen;
+	socklen_t clientAddrLen;
 
 	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
@@ -27,7 +27,7 @@ int main(void)
 		exit(1);
 	}
 
-	if ( (bind (ls, &servAddr, sizeof(servAddr))) < 0)
+	if ( (bind (ls, (const struct sockaddr*)&servAddr, sizeof(servAddr))) < 0)
 	{
 		perror("Error: binding failed!");
 		exit(1);
@@ -41,7 +41,7 @@ int main(void)
 
 	for(;;)
 	{
-		if (s = accept(ls, &clientAddr, &clientAddrLen) < 0)
+		if ( (s = accept(ls, (struct sockaddr*)&clientAddr, &clientAddrLen)) < 0)
 		{
 			perror("Error: accepting failed!");
 			exit(1);
