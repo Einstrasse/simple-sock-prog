@@ -6,5 +6,5 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#define SERV_PORT 1234 //TCP
+#define SERV_PORT 1313 //TCP
 #define SERVER_PORT 2345 //UDP

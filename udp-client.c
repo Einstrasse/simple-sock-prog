@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 	char buffer[256+1];
 	struct sockaddr_in servAddr;
 
-	if (argc != 3)
+	if (argc != 4)
 	{
 		printf("Error: three arguments are needed!");
 		exit(1);
@@ -22,11 +22,15 @@ int main(int argc, char* argv[])
 
 	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
-	inet_pton(AF_INET, servName, &servAddr.sin_addr);
+	if ( (inet_pton(AF_INET, servName, &servAddr.sin_addr)) != 1) 
+	{
+		perror("Invalid ip address\n");
+		exit(1);
+	};
 
 	servAddr.sin_port = htons(servPort);
 
-	if ( (s = socket(PF_INET, SOCK_DGRAM, 0) < 0) )
+	if ( (s = socket(PF_INET, SOCK_DGRAM, 0)) < 0 )
 	{
 		perror("Error: Socket failed!");
 		exit(1);
@@ -35,10 +39,19 @@ int main(int argc, char* argv[])
 	len = sendto(s, string, strlen(string), 0, 
 		(const struct sockaddr*)&servAddr, sizeof(servAddr));
 
+	printf("sent messages len: %d\n", len);
+	if (len < 0) 
+	{
+		perror("Error: message send failed!");
+		exit(1);
+	}
 	recvfrom(s, buffer, len, 0, NULL, NULL);
 
 	buffer[len] = '\0';
 	printf("Echo string received: ");
+	// for (int i=0; i < len; i++) {
+	// 	printf("%d", buffer[i]);
+	// }
 	fputs(buffer, stdout);
 	close(s);
 	exit(0);

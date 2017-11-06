@@ -29,7 +29,13 @@ int main(void)
 	{
 		len = recvfrom(s, buffer, sizeof(buffer), 0,
 		 (struct sockaddr*)&clntAddr, &clntAddrLen);
+		printf("receiving message len: %d\n", len);
 
-		sendto(s, buffer, len, 0, (struct sockaddr*)&clntAddr, sizeof(clntAddr));
+		int reply_len = sendto(s, buffer, len, 0, (struct sockaddr*)&clntAddr, sizeof(clntAddr));
+		if (reply_len == -1) {
+			perror("Error: reply failed!");
+			exit(1);
+		}
+		printf("reply message len: %d\n", reply_len);
 	}
 }
